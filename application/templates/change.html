@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="card card-style mb-2">
+    <div class="card-body">
+        <form action="#" method="POST">
+            <fieldset class="form-group">
+                <legend class="mb-4">THAY ĐỔI THUỘC TÍNH ĐẦU VÀO</legend>
+                <div class="form-group">
+                    {{ form.feature.label(class="form-control-label") }}
+                    {{ form.feature(class="form-control form-control-sm") }}
+                </div>
+                <div class="form-group">
+                    {{ form.category.label(class="form-control-label") }}
+                    {{ form.category(class="form-control form-control-sm") }}
+                </div>
+                <div class="form-group border-bottom">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

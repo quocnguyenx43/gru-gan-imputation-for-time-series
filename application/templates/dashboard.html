@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="{{cdn_css | safe}}" type="text/css" />
+<script type="text/javascript" src="{{cdn_js | safe}}"></script>
+<link rel="stylesheet" href="../static/style.css">
+
+
+<div id="container">
+    <div id="header">
+        <p class="text-info">DS105 DASHBOARD</p>
+    </div>
+    <hr>
+    <div id="top">
+        <div id="left">
+            {{div[0] | safe}}
+        </div>
+        <div id="right">
+            {{div[2] | safe}}
+        </div>
+    </div>
+    <div id="bottom">
+        {{div[1] | safe}}
+    </div>
+</div>
+
+{{script[0] | safe}}
+{{script[1] | safe}}
+{{script[2] | safe}}
+
+{% endblock %}

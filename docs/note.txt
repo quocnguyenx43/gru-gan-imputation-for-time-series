@@ -1,0 +1,47 @@
+DS105
+
+1. Deep Generative Model:
+	a. Mô hình bài toán: 
+		- Mô hình: Điền giá trị khuyết x sao cho tối đa hóa được Classification Accuracy Metric (Cross-Entropy Loss)
+		- Bài toán: Network Flow Dataset với mỗi Flow được gán nhãn vào 1 application (2 nhãn là chấp nhận trễ và không chấp nhận trễ). Dataset này gồm 266 features: Mean & Variance độ dài gói tin, Source & Des port, Throughput,... và 22 application được map thành 2 lớp: chấp nhận trễ và không chấp nhận trễ.
+
+	b. GACN: Giải thuật điền khuyết xem xét đến Classification Accuracy
+		- Generator Network: Sinh ra dữ liệu khuyết gần giống thực tế nhất
+			+ G(X, M, Z) = X' (Bao gồm cả observed và unobserved data)
+		- Discriminator Network: Trả về Feedback độ tốt cho Generator
+			+ D(X') = [0, 1]^d (Vector xác suất xem các giá trị của X' là observed hay imputed trong khi GAN's D là xác định fake hay real)
+			+ Từ sự khác biệt đó: Cần cung cấp cho việc training D một số thông tin như Selection Vector (Khả năng giá trị đó là bị thiếu) R:
+			+ Output: P'(X', R) = D(X)i nếu R_i = 0 hoặc M_i nếu ngược lại
+			=> P'(X', R) giống y chang M_i chỉ khác trường hợp R_i = 0
+		- Classifier Network: Trả về độ tốt đối với Final Accuracy (Giúp G và D tìm ra Feature quan trọng trong ảnh hưởng đến Accuracy)
+			+ A(X'): Vector xác suất gán mỗi điểm dữ liệu vào các nhãn khác nhau
+
+		=> Main Idea: 
+			+ Train sao cho đạt được Generator tốt nhất
+			+ D cố gắng Maximize độ chính xác dự đoán của mình (Imputed or Observed)
+			+ G cố gắng Minimize độ chính xác dự đoán của D (Tức là sinh ra dữ liệu sao cho D không thể phân biệt được)
+
+	c. Chứng minh tại sao tối ưu bằng toán? => Khó vãi cả l (Bỏ qua)
+
+	d. Thuật toán tìm G và D tối ưu:
+		+ B1: Fixed G => Update D và A
+		+ B2: Locally Optimal D và A => Update G
+
+	e. Semi-Supervised GACN: Thay đổi và cải tiến của GACN với điều kiện không cần có đầy đủ Label
+
+	f. Thực nghiệm
+		Lấy dữ liệu => Drop Missing Value => Sample => Tạo MAR data với xác suất P
+
+	=> Bài này làm Tabular thì mình làm Time Series
+
+
+
+ĐỒ ÁN:
+	+ Xây dựng Loss cho D
+	+ Xây dựng Loss cho A
+	+ Xây dựng Loss cho G
+	+ Xây dựng Generator Network bằng GRUI
+	+ Xây dựng Discriminator Network
+	+ Xây dựng Classification Network
+	+ Xây dựng hàm train
+

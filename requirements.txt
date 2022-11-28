@@ -1,0 +1,8 @@
+flask
+flask_sqlalchemy
+flask_wtf
+numpy
+matplotlib
+seaborn
+bokeh==2.4.3
+plotly
