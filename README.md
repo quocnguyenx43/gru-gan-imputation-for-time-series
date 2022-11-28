@@ -1,12 +1,18 @@
 # Chạy console:
+
 - Mô hình GAN
-### Cách chạy console:
+
+## Cách chạy console:
+
 - `python main.py`
 
 # Chạy `flask` localhost:
+
 - Dashboard trực quan hóa dữ liệu
 - Mô hình GAN
-### Cách chạy `flask` localhost:
+
+## Cách chạy `flask` localhost:
+
 - Cài môi trường ảo: `pip install virtualenv`
 - Tạo môi trường ảo: `virtualenv venv`
 - Active môi trường ảo: `venv\Scripts\activate`
