@@ -1,4 +1,5 @@
 venv/
 docs/
 reports/
-__pycache__/
+application/__pycache__/
+utils/__pycache__/
