@@ -5,7 +5,31 @@
 <script type="text/javascript" src="{{cdn_js | safe}}"></script>
 <link rel="stylesheet" href="../static/style.css">
 
+<!-- Feature Changes -->
+<div class="heading">
+    <p class="text-info">THAY ĐỔI THUỘC TÍNH ĐẦU VÀO</p>
+</div>
+<div class="card card-style mb-2">
+    <div class="card-body">
+        <form action="#" method="POST">
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.feature.label(class="form-control-label") }}
+                    {{ form.feature(class="form-control form-control-sm") }}
+                </div>
+                <div class="form-group">
+                    {{ form.category.label(class="form-control-label") }}
+                    {{ form.category(class="form-control form-control-sm") }}
+                </div>
+                <div class="form-group border-bottom">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
 
+<!-- Dashboard -->
 <div id="container">
     <div class="heading">
         <p class="text-info">DS105 DASHBOARD</p>
