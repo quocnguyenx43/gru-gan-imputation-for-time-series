@@ -13,8 +13,7 @@ class UserInputForm(FlaskForm):
             ('Precipitation', 'Precipitation'),
             ('Pressure', 'Pressure'),
             ('Wind_Speed', 'Wind Speed'),
-            ('Wind_Direction', 'Wind Direction'),
-            ('pm25', 'pm25')
+            ('Wind_Direction', 'Wind Direction')
         ]
     )
     category = SelectField(

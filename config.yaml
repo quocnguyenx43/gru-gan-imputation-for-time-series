@@ -1,4 +1,4 @@
-data_path: "data/final.csv"
+data_path: "data/5years.csv"
 
 missing_value_ratio: 0.7
 # percential

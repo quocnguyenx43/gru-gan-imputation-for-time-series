@@ -13,12 +13,14 @@ def dashboard():
     category = request.args.get('category', default='MO')
     target = request.args.get('target', default='Temperature')
 
-    script1, div1 = vis.avg_per_category_barplot(category, target)
-    script2, div2 = vis.line_circle_plot_top_10(target, 10)
+    script0, div0 = vis.distribution_plot(target)
+    script1, div1 = vis.boxplot_chart(category, target)
+    script2, div2 = vis.avg_per_category_barplot(category, target)
     script3, div3 = vis.avg_quarter_year_barplot(target)
+    script4, div4 = vis.line_circle_plot_top_10(target, 10)
 
-    script = [script1] + [script2] + [script3]
-    div = [div1] + [div2] + [div3]
+    script = [script0] + [script1] + [script2] + [script3] + [script4]
+    div = [div0] + [div1] + [div2] + [div3] + [div4]
 
     return render_template(
         'dashboard.html', 

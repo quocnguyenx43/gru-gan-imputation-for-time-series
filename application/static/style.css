@@ -3,7 +3,7 @@
     margin: 0 auto;
 }
 
-#header {
+.heading {
     height: 40px;
     display: block; 
     text-align: center;
@@ -12,23 +12,35 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#top {
+.division-two {
     display: flex;
     flex-direction: row;
 }
 
-#left {
+.left-50 {
+    display: block;
+    width: 50%;
+    flex: 50%;
+}
+
+.right-50 {
+    display: block;
+    width: 50%;
+    flex: 50%;
+}
+
+.lef50 {
     display: block;
     width: 35%;
     flex: 35%;
 }
 
-#right {
+.right-65 {
     display: block;
     width: 65%;
     flex: 65%;
 }
 
-#bottom {
+.entire {
     margin: auto;
 }

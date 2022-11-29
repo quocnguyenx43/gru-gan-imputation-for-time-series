@@ -7,25 +7,45 @@
 
 
 <div id="container">
-    <div id="header">
+    <div class="heading">
         <p class="text-info">DS105 DASHBOARD</p>
     </div>
+
     <hr>
-    <div id="top">
-        <div id="left">
+
+    <!-- Charts -->
+    <div class="division-two">
+        <div class="left-50">
             {{div[0] | safe}}
         </div>
-        <div id="right">
-            {{div[2] | safe}}
+        <div class="right-50">
+            {{div[1] | safe}}
         </div>
     </div>
-    <div id="bottom">
-        {{div[1] | safe}}
+    <div class="division-two">
+        <div class="left-35">
+            {{div[2] | safe}}
+        </div>
+        <div class="right-65">
+            {{div[3] | safe}}
+        </div>
     </div>
+    <div class="entire">
+        {{div[4] | safe}}
+    </div>
+    <hr>
+
+    <!-- GAN -->
+    <div class="heading">
+        <p class="text-info">GAN MODEL</p>
+    </div>
+    <hr>
 </div>
 
 {{script[0] | safe}}
 {{script[1] | safe}}
 {{script[2] | safe}}
+{{script[3] | safe}}
+{{script[4] | safe}}
 
 {% endblock %}
