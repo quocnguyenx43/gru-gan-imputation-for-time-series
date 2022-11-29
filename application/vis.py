@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from scipy.stats.kde import gaussian_kde
+
 from bokeh.plotting import figure, show, output_notebook, output_file
 from bokeh.palettes import all_palettes
 from bokeh.models import (
@@ -267,6 +269,20 @@ def distribution_plot(col):
         bottom=0, top=hist, left=edges[:-1], right=edges[1:],
         line_color="white", fill_color='red', fill_alpha=0.75,
         hover_fill_alpha=1.0, hover_fill_color='navy'
+    )
+
+    from scipy.stats.kde import gaussian_kde
+    pdf = gaussian_kde(df[col])
+    x = np.linspace(df[col].min(), df[col].max(), 1000)
+    p.line(
+        x='top', y='right',
+        source=ColumnDataSource(
+            pd.DataFrame({
+                'top': x,
+                'right': pdf(x)
+            })
+        ),
+        line_width=5
     )
 
     # Add tools
