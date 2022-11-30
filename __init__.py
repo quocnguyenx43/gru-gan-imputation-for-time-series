@@ -1,4 +1,5 @@
-from utils import *
-from . import model
-from . import train
+# Gan model
+from . import gan
+
+# Flask server app
 from . import application

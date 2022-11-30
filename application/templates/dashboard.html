@@ -14,30 +14,35 @@
         <form action="#" method="POST">
             <fieldset class="form-group">
                 <div class="form-group">
-                    {{ form.feature.label(class="form-control-label") }}
-                    {{ form.feature(class="form-control form-control-sm") }}
+                    {{ change_feature_form.feature.label(class="form-control-label") }}
+                    {{ change_feature_form.feature(class="form-control form-control-sm") }}
                 </div>
                 <div class="form-group">
-                    {{ form.category.label(class="form-control-label") }}
-                    {{ form.category(class="form-control form-control-sm") }}
+                    {{ change_feature_form.category.label(class="form-control-label") }}
+                    {{ change_feature_form.category(class="form-control form-control-sm") }}
                 </div>
                 <div class="form-group border-bottom">
-                    {{ form.submit(class="btn btn-outline-info") }}
+                    {{ change_feature_form.submit(class="btn btn-outline-info") }}
                 </div>
             </fieldset>
         </form>
     </div>
 </div>
 
-<!-- Dashboard -->
+<!-- General Dashboard -->
 <div id="container">
     <div class="heading">
-        <p class="text-info">DS105 DASHBOARD</p>
+        <p class="text-info">THÔNG TIN CHUNG VỀ BỘ DỮ LIỆU WHEATHER FORECAST</p>
     </div>
-
     <hr>
-
-    <!-- Charts -->
+    <div class="heading">
+        THỐNG KÊ MÔ TẢ CỦA BỘ DỮ LIỆU
+    </div>
+    <hr>
+    <div class="entire">
+        {{ df_statistics | safe }}
+    </div>
+    <hr>
     <div class="division-two">
         <div class="left-50">
             {{div[0] | safe}}
@@ -54,16 +59,76 @@
             {{div[3] | safe}}
         </div>
     </div>
+
+    <!-- Time series plot -->
+    <hr>
+    <div class="heading">
+        <p class="text-info">TIME SERIES PLOT</p>
+    </div>
+    <hr>
     <div class="entire">
         {{div[4] | safe}}
     </div>
-    <hr>
 
-    <!-- GAN -->
+    <!-- Regression plots -->
+    <hr>
     <div class="heading">
-        <p class="text-info">GAN MODEL</p>
+        <p class="text-info">REGRESSION PLOTS</p>
     </div>
     <hr>
+
+    <div class="entire">
+        {{div[5] | safe}}
+    </div>
+    <hr>
+</div>
+
+<!-- Strategy Changes -->
+<div class="heading">
+    <p class="text-info">THAY ĐỔI CHIẾN LƯỢC ĐIỀN KHUYẾT</p>
+</div>
+<div class="card card-style mb-2">
+    <div class="card-body">
+        <form action="#" method="POST">
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ change_strategy_form.strategy.label(class="form-control-label") }}
+                    {{ change_strategy_form.strategy(class="form-control form-control-sm") }}
+                </div>
+                <div class="form-group border-bottom">
+                    {{ change_strategy_form.submit(class="btn btn-outline-info") }}
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<!-- So sánh -->
+<hr>
+<div class="heading">
+    <p class="text-info">SO SÁNH GIỮA GIÁ TRỊ ĐIỀN KHUYẾT VÀ GIÁ TRỊ THẬT</p>
+</div>
+
+{% if strategy == 'All' %}
+<div class="heading">
+    <p class="text-info">PHƯƠNG PHÁP: ALL (GAN, kNN & Random từ Q1 đến Q3)</p>
+</div>
+<div class="division-three">
+    <div class="d-33 heading">GAN</div>
+    <div class="d-33 heading">kNN</div>
+    <div class="d-33 heading">Random từ Q1 đến Q3</div>
+</div>
+<hr>
+{% else %}
+<hr>
+<div class="heading">
+    <p class="text-info">PHƯƠNG PHÁP: {{ strategy }}</p>
+</div>
+<hr>
+{% endif %}
+
+<div class="entire">
+    {{div[6] | safe}}
 </div>
 
 {{script[0] | safe}}
@@ -71,5 +136,7 @@
 {{script[2] | safe}}
 {{script[3] | safe}}
 {{script[4] | safe}}
+{{script[5] | safe}}
+{{script[6] | safe}}
 
 {% endblock %}

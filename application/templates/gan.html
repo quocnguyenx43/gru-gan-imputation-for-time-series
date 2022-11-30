@@ -5,12 +5,41 @@
 <script type="text/javascript" src="{{cdn_js | safe}}"></script>
 <link rel="stylesheet" href="../static/style.css">
 
+<!-- Strategy Changes -->
+<div class="heading">
+    <p class="text-info">THAY ĐỔI CHIẾN LƯỢC ĐIỀN KHUYẾT</p>
+</div>
+<div class="card card-style mb-2">
+    <div class="card-body">
+        <form action="#" method="POST">
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.strategy.label(class="form-control-label") }}
+                    {{ form.strategy(class="form-control form-control-sm") }}
+                </div>
+                <div class="form-group border-bottom">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
 
+<!-- So sánh -->
 <div id="container">
+    <!-- AA -->
+    <hr>
     <div class="heading">
-        <p class="text-info">GAN MODEL</p>
+        <p class="text-info">SO SÁNH GIỮA GIÁ TRỊ ĐIỀN KHUYẾT VÀ GIÁ TRỊ THẬT</p>
+    </div>
+    <hr>
+
+    <div class="entire">
+        {{div | safe}}
     </div>
     <hr>
 </div>
+
+{{script | safe}}
 
 {% endblock %}

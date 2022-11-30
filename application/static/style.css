@@ -29,7 +29,7 @@
     flex: 50%;
 }
 
-.lef50 {
+.left-35 {
     display: block;
     width: 35%;
     flex: 35%;
@@ -41,6 +41,19 @@
     flex: 65%;
 }
 
+.division-three {
+    display: flex;
+    flex-direction: row;
+}
+
+.d-33 {
+    display: block;
+    width: 33%;
+    flex: 33%;
+}
+
 .entire {
     margin: auto;
+    display: block; 
+    text-align: center;
 }

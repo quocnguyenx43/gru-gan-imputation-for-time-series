@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, SubmitField
 from wtforms.validators import DataRequired
 
-class UserInputForm(FlaskForm):
+class ChangeInputFeatureForm(FlaskForm):
     feature = SelectField(
         'Target feature',
         validators=[DataRequired()],
@@ -22,6 +22,19 @@ class UserInputForm(FlaskForm):
         choices=[
             ('MO', 'Month'),
             ('YEAR', 'Year')
+        ]
+    )
+    submit = SubmitField("Nổ máy!!")
+
+class ChangeStrategyForm(FlaskForm):
+    strategy = SelectField(
+        'Strategy',
+        validators=[DataRequired()],
+        choices=[
+            ('All', 'All'),
+            ('gan', 'GAN'),
+            ('knn', 'kNN'),
+            ('random', 'Random (Từ Q1 đến Q3)')
         ]
     )
     submit = SubmitField("Nổ máy!!")

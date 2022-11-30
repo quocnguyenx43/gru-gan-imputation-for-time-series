@@ -14,6 +14,8 @@ from bokeh.models.transforms import LinearInterpolator
 from bokeh.embed import components
 from bokeh.resources import CDN
 from bokeh.io import curdoc
+from bokeh.layouts import row
+from bokeh.layouts import column
 
 
 from flask import send_file
@@ -30,6 +32,17 @@ df = pd.read_csv('data/5years.csv')
 df['DATE'] = df['MO'].astype('string') + '-' + df['DY'].astype('string') + '-' + df['YEAR'].astype('string')
 df['DATE'] = pd.to_datetime(df['DATE'], format='%m-%d-%Y')
 
+# Features
+FEATURES = [
+    "Temperature", "Relative_Humidity", "Specific_Humidity",
+    "Precipitation", "Pressure", "Wind_Speed", "Wind_Direction"
+]
+
+# Strategies
+STRATEGIES = [
+    "gan", "knn", "random",
+]
+
 # Add Quarter
 def mo_to_qua(mo):
     if mo <= 3:
@@ -42,6 +55,25 @@ def mo_to_qua(mo):
         return 4
 
 df['QUARTER'] = df['MO'].map(mo_to_qua)
+
+"""
+    Chart thể hiện: Lấy statistics về dataset HTML table dạng
+    Input:
+    Output:
+        * script: Đoạn script của chart
+        * div: Đoạn div của chart
+"""
+def df_original():
+    return df.to_html(classes='table table-striped caption-top table-hover')
+
+"""
+    Chart thể hiện: Lấy statistics về dataset HTML table dạng
+    Input:
+    Output:
+        * html: code html
+"""
+def df_statistics():
+    return df[FEATURES].describe().to_html(classes='table table-striped caption-top table-hover')
 
 
 """
@@ -115,12 +147,15 @@ def line_circle_plot_top_10(col, n):
 
     # Sources
     source_circle = ColumnDataSource(
-        pd.DataFrame(dict(
-            DATE=[df.loc[i]['DATE'] for i in idx_top],
-            COL=[df.loc[i][col] for i in idx_top]
-        ))
+        pd.DataFrame({
+            'DATE': [df.loc[i]['DATE'] for i in idx_top],
+            'COL': [df.loc[i][col] for i in idx_top]
+        })
     )
-    source_line = ColumnDataSource(df)
+    source_line = ColumnDataSource(pd.DataFrame({
+        'DATE': df['DATE'],
+        'COL': df[col]
+    }))
 
     # Figure
     p = figure(
@@ -131,7 +166,7 @@ def line_circle_plot_top_10(col, n):
     )
 
     # Plot
-    p.line(x='DATE', y=col, source=source_line, line_color='#747C92', line_width=1)
+    p.line(x='DATE', y='COL', source=source_line, line_color='#747C92', line_width=1)
     p.circle(
         x='DATE', 
         y='COL', 
@@ -151,7 +186,7 @@ def line_circle_plot_top_10(col, n):
         HoverTool(
             tooltips=[
                 ('Ngày: ', '@DATE{%F}'),
-                ('Mức độ ' + col + ': ', '@' + col)
+                ('Mức độ ' + col + ': ', '@COL')
             ],
             formatters={'@DATE': 'datetime'},
             mode='mouse'
@@ -423,4 +458,228 @@ def boxplot_chart(category, col):
 
     script, div = components(p)
 
+    return script, div
+
+
+def regression_plot(colx, coly):
+
+    x = df[colx]
+    y = df[coly]
+
+    source_data = ColumnDataSource({'x': x, 'y': y})
+
+    p = figure(
+        height=505,
+        width=505,
+        x_axis_label=colx, 
+        y_axis_label=coly,
+        title='Regression Plot ' + colx + ' theo ' + coly,
+        toolbar_location='below',
+        tools='save, pan, box_zoom, wheel_zoom, reset'
+    )
+
+    p.circle(
+        x='x',
+        y='y',
+        source=source_data,
+        size=6,
+        color='red'
+    )
+
+    # Line
+    par = np.polyfit(x, y, 1, full=True)
+    slope = par[0][0]
+    intercept = par[0][1]
+    y_predicted = [slope * i + intercept  for i in x]
+
+    p.line(
+        x, y_predicted,
+        color='grey',
+        line_width=4
+    )
+
+    # Add tools
+    p.add_tools(
+        HoverTool(
+            tooltips=[
+                (colx + ': ', '@x'),
+                (coly + ' : ', '@y')
+            ],
+            mode='mouse'
+        )
+    )
+
+    p.xaxis.major_label_orientation = 1
+    p.xgrid.grid_line_color = None
+
+    # Title
+    p.title_location = "above"
+    p.title.text_font_size = "15px"
+    p.title.align = "center"
+    p.title.background_fill_color = None
+    p.title.text_color = "black"
+    
+    return p
+
+
+"""
+    Chart thể hiện: Regresion plot của feature với tất cả biến còn lại
+    Input:
+        * col: Chọn feature
+    Output:
+        * script: Đoạn script của chart
+        * div: Đoạn div của chart
+"""
+def regresion_plot_full(col):
+    cols = [
+        'Temperature', 'Relative_Humidity', 'Specific_Humidity',
+        'Precipitation', 'Pressure', 'Wind_Speed', 'Wind_Direction'
+    ]
+    cols.remove(col)
+
+    r = []
+    for c in cols:
+        r += [regression_plot(col, c)]
+        
+    script, div = components(column(row(r[:3]), row(r[3:])))
+
+    return script, div
+
+"""
+    Chart thể hiện: Plot 1 thuộc tính / 1 phương pháp
+    Input:
+        * strategy: Phương pháp điền khuyết
+        * col: Chọn feature
+    Output:
+        * script: Đoạn script của chart
+        * div: Đoạn div của chart
+"""
+def plot_pred_and_real(strategy, col, s=0, e=1826):
+
+    # Get data
+    mask = np.array(pd.read_csv('data_plot/mask.csv'))
+    real = np.array(df[FEATURES])
+    imputed = np.array(pd.read_csv('data_plot/' + strategy + '.csv'))
+    
+    # col => idx (0, 1, 2, 3, 4, 5, 6)
+    cols = dict([(fea, idx) for fea, idx in zip(FEATURES, range(len(FEATURES)))])
+
+    prediction = np.multiply(mask, imputed)[s:e].T[cols[col]]
+    real_value = np.multiply(mask, real)[s:e].T[cols[col]]
+
+    # Xóa hết giá trị 0
+    # prediction = np.delete(prediction, np.where(prediction == 0))
+    # real_value = np.delete(real_value, np.where(real_value == 0))
+
+    x_range = [str(x) for x in list(range(s, e))]
+
+    # y_min = np.min(np.array(np.min(prediction), np.min(real_value)))
+    # y_max = np.max(np.array(np.max(prediction), np.max(real_value))) 
+    # y_range = [str(y) for y in range(int(y_min), int(y_max) + 1)]
+
+    source_prediction = ColumnDataSource({
+        'x': x_range, 'y': prediction,
+        'z': np.array(['Giá trị đự đoán'] * len(prediction))
+    })
+    source_real_value = ColumnDataSource({
+        'x': x_range, 'y': real_value,
+        'z': np.array(['Giá trị thực tế'] * len(real_value))
+    })
+
+    p = figure(
+        height=505,
+        width=505,
+        #x_range=x_range,
+        #y_range=y_range,
+        x_axis_label='Vị trí của điểm dữ liệu', 
+        y_axis_label=col,
+        title='So sánh giữa dữ liệu điền khuyết và dữ liệu thực tế',
+        toolbar_location='below',
+        tools='save, pan, box_zoom, wheel_zoom, reset'
+    )
+
+    # Prediction
+    p.circle(
+        x='x',
+        y='y',
+        source=source_prediction,
+        size=6,
+        color='red',
+        legend_label='Giá trị dự đoán'
+    )
+
+    # Real value
+    p.circle(
+        x='x',
+        y='y',
+        source=source_real_value,
+        size=6,
+        color='blue',
+        legend_label='Giá trị thực tế'
+    )
+    
+    # # Add tools
+    p.add_tools(
+        HoverTool(
+            tooltips=[
+                ('Điểm dữ liệu: ', '@x'),
+                ('Giá trị ' + col + ' :', '@y'),
+                ('Thuộc nhóm :', '@z')
+            ],
+            mode='mouse'
+        )
+    )
+
+    p.xaxis.major_label_orientation = 1
+    p.xgrid.grid_line_color = None
+
+    # Title
+    p.title_location = "above"
+    p.title.text_font_size = "15px"
+    p.title.align = "center"
+    p.title.background_fill_color = None
+    p.title.text_color = "black"
+
+    # Legend
+    p.legend.title = "Loại"
+    
+    return p
+
+"""
+    Chart thể hiện: Plot n thuộc tính / 1 phương pháp
+    Input:
+        * strategy: Phương pháp điền khuyết
+        * col: Chọn feature
+    Output:
+        * script: Đoạn script của chart
+        * div: Đoạn div của chart
+"""
+def plot_pred_and_real_all(strategy, s=0, e=1826):
+    cols = [
+        'Temperature', 'Relative_Humidity', 'Specific_Humidity',
+        'Precipitation', 'Pressure', 'Wind_Speed', 'Wind_Direction'
+    ]
+
+    plot = []
+    for c in cols:
+        plot += [plot_pred_and_real(strategy, c, s, e)]
+        
+    return plot
+
+"""
+    Chart thể hiện: Plot n thuộc tính / n phương pháp hoặc tất cả
+    Input:
+        * strategy: Phương pháp điền khuyết
+    Output:
+        * script: Đoạn script của chart
+        * div: Đoạn div của chart
+"""
+def plot_red_and_real_all_strategy(strategy, s=0, e=1826):
+    if strategy != 'All':
+        plot = plot_pred_and_real_all(strategy, s, e)
+        script, div = components(column(row(plot[:3]), row(plot[3:]), plot[-1]))
+    else:
+        plot = [column(plot_pred_and_real_all(st, s, e)) for st in STRATEGIES]
+        plot = row(plot)
+        script, div = components(plot)
     return script, div
