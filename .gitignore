@@ -3,3 +3,5 @@ docs/
 reports/
 application/__pycache__/
 utils/__pycache__/
+note.txt
+ngrok.exe

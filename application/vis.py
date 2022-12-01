@@ -557,9 +557,9 @@ def regresion_plot_full(col):
 def plot_pred_and_real(strategy, col, s=0, e=1826):
 
     # Get data
-    mask = np.array(pd.read_csv('data_plot/mask.csv'))
+    mask = np.array(pd.read_csv('results/mask.csv'))
     real = np.array(df[FEATURES])
-    imputed = np.array(pd.read_csv('data_plot/' + strategy + '.csv'))
+    imputed = np.array(pd.read_csv('results/' + strategy + '.csv'))
     
     # col => idx (0, 1, 2, 3, 4, 5, 6)
     cols = dict([(fea, idx) for fea, idx in zip(FEATURES, range(len(FEATURES)))])
