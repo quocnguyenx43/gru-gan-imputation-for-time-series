@@ -1,3 +1,20 @@
+<!-- Banner -->
+<p align="center">
+  <a href="https://www.uit.edu.vn/" title="Trường Đại học Công nghệ Thông tin" style="border: none;">
+    <img src="https://i.imgur.com/WmMnSRt.png" alt="Trường Đại học Công nghệ Thông tin | University of Information Technology">
+  </a>
+</p>
+
+<h1 align="center"><b>Phân tích và trực quan hóa dữ liệu - DS105.N11</b></h>
+
+## COURSE INTRODUCTION
+
+- **Name:** Phân tích và trực quan hóa dữ liệu - Data Visualization & Analysis
+- **Course ID:** DS105
+- **Class ID:** DS105.N11
+- **Year:** First Semester (2022 - 2023)
+- **Lecturer**: MSc. Phạm Thế Sơn
+
 ## Giải thích cấu trúc thư mục
 - `data`: Thư mục chứa tập dữ liệu.
 - `application`: Thư mục chứa triển khai Flask Server (Dashboard và vis kết quả thực nghiệm của các phương pháp điền khuyết).
