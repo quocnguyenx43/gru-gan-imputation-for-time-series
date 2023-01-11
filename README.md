@@ -30,5 +30,3 @@
     - Active môi trường ảo: `venv\Scripts\activate`
     - Cài đặt các thư viện và framework yêu cầu: `pip install -r requirements.txt`
     - Chạy `python run.py`
-
-`pip3 freeze > requirements.txt`
